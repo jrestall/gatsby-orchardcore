@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"sourceMap": true,
+		"removeComments": true,
+		"jsx":"react",
+
+		"lib": ["dom", "esnext"],
+		"target": "es2017",
+
+		"declaration": true,
+		"declarationDir": "types",
+
+		"noEmit": true,
+		"noEmitOnError": true,
+		"noErrorTruncation": true,
+
+		// rollup takes care of these
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+
+		// TODO: error all the things
+		//"strict": true,
+		"esModuleInterop": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true
+    },
+    "exclude": ["node_modules", "public"]
+}

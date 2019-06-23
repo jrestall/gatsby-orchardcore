@@ -1,0 +1,51 @@
+{
+    "name": "gatsby-orchardcore",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "jrestall <james.restall@gmail.com> (@james.restall)",
+    "license": "MIT",
+    "private": true,
+    "devDependencies": {
+        "@types/react": "^16.8.22",
+        "@types/react-dom": "^16.8.4",
+        "lerna": "^3.15.0",
+        "husky": "^2.3.0",
+        "lint-staged": "^8.1.7",
+        "prettier": "^1.17.1",
+        "tslint": "^5.18.0",
+        "tslint-config-prettier": "^1.18.0",
+        "tslint-loader": "^3.5.4",
+        "tslint-plugin-prettier": "^2.0.1",
+        "tslint-react": "^4.0.0",
+        "typescript": "^3.5.2"
+    },
+    "scripts": {
+        "build": "gatsby build",
+        "develop": "gatsby develop",
+        "format": "prettier --write packages/**/*.{js,jsx,ts,tsx}",
+        "start": "npm run develop",
+        "serve": "gatsby serve",
+        "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
+        "type": "tsc --noEmit",
+        "lint": "tslint packages/**/*.{js,ts,tsx}"
+    },    
+    "workspaces": [
+        "packages/*",
+        "example/*"
+    ],
+    "husky": {
+        "hooks": {
+            "pre-commit": "yarn type && lint-staged && yarn format && git add ."
+        }
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx}": ["yarn run lint", "git add"]
+      },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jrestall/gatsby-orchardcore.git"
+    },
+    "bugs": {
+        "url": "https://github.com/jrestall/gatsby-orchardcore/issues"
+    }
+}
