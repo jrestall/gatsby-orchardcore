@@ -8,7 +8,7 @@ module.exports = {
         // This is field under which it's accessible
         fieldName: 'cms',
         // Url to query from
-        url: 'http://*/api/graphql',
+        url: 'http://digital-nexus-cms.azurewebsites.net/api/graphql',
       },
     },
   ],

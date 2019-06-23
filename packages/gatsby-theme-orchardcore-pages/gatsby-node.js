@@ -93,12 +93,9 @@ exports.createPages = ({ store, graphql, actions, getNodesByType }) => {
           return
         }
 
-        // Create blog posts pages.
-        const pages = result.data.cms.page
-
-        // tslint:disable-next-line: no-console
         console.log('Building CMS pages.')
 
+        const pages = result.data.cms.page
         pages.forEach((page, index) => {
           if (!page) {
             return
