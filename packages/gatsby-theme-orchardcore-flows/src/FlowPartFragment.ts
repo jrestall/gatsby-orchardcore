@@ -33,6 +33,8 @@ export const query = graphql\`
 
     return `fragment FlowPartWidgets on CMS_FlowPart {
       widgets {
+        __typename
+        contentType
         ${this.widgets.map(widget => `...${widget.name}`)}
       }
     }`

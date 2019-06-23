@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { writeFileSync } from 'fs-extra'
+import _ from 'lodash'
 import mkdirp from 'mkdirp'
 
 export default function buildFlowTemplate(
@@ -24,23 +25,36 @@ export default function buildFlowTemplate(
 
   // Output a new component with imports and widget mappings for this specific content item
   const componentTemplate = `
-        import React from 'react'
-        import { WidgetProvider } from '../context/WidgetProvider'
-        import BaseTemplate from '${baseTemplate}'
-        ${widgetNodes.map(
-          widget => `import ${widget.name} from '${widget.path}'`
-        )}
+import React from 'react'
+import { graphql } from 'gatsby'
+import { WidgetProvider } from '${require.resolve('./context/WidgetProvider')}'
+import BaseTemplate from '${baseTemplate}'
+${widgetNodes.map(widget => `import ${widget.name} from '${widget.path}'`)}
 
-        export default function FlowTemplate(props) {
-            const widgets = {
-                ${widgetNodes.map(widget => `'${widget.name}':${widget.name},`)}
-            }
-            return (
-                <WidgetProvider widgets={widgets}>
-                    <BaseTemplate {...props} />
-                </WidgetProvider>
-            )
-        }`
+export default function FlowTemplate(props) {
+    const widgets = {
+        ${widgetNodes.map(widget => `'${widget.name}':${widget.name},`)}
+    }
+    return (
+        <WidgetProvider widgets={widgets}>
+            <BaseTemplate {...props} />
+        </WidgetProvider>
+    )
+}
+
+export const query = graphql\`
+  query PageQuery${name}($contentItemId: String!) {
+    cms {
+      page(contentItemId: $contentItemId) {
+        displayText
+        flowPart {
+          ...FlowPartWidgets
+        }
+      }
+    }
+  }
+\`
+`
 
   // Save to cache and return file path
   const program = store.getState().program
@@ -64,7 +78,7 @@ function findWidgets(contentItem: any): string[] {
     return null
   }
 
-  const widgets: string[] = []
+  let widgets: string[] = []
 
   const widgetName = getWidgetName(contentItem)
   if (!widgetName) {
@@ -75,12 +89,11 @@ function findWidgets(contentItem: any): string[] {
 
   if (contentItem.flowPart) {
     const contentWidgets = contentItem.flowPart.widgets
-    for (const widget in contentWidgets) {
-      if (contentWidgets.hasOwnProperty(widget)) {
-        const childWidgets = findWidgets(widget)
-        if (childWidgets) {
-          widgets.concat(childWidgets)
-        }
+    for (const widget of contentWidgets) {
+      const childWidgets = findWidgets(widget)
+      if (childWidgets) {
+        const combinedWidgets = _.union(widgets, childWidgets)
+        widgets = combinedWidgets
       }
     }
   }

@@ -10,6 +10,11 @@ export function WidgetElement({ type, ...props }) {
   const components = useWidgets(null)
   const Component = components[type] || DEFAULTS[type]
 
+  if (!Component) {
+    console.log(`Couldn't find a widget mapping for the ${type} widget.`)
+    return null
+  }
+
   return React.createElement(Component, props)
 }
 

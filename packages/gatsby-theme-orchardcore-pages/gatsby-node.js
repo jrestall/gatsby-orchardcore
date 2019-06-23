@@ -105,7 +105,7 @@ exports.createPages = ({ store, graphql, actions, getNodesByType }) => {
           }
 
           const pagePath = page.autoroutePart.path
-          const pageName = pagePath.replace(/[^a-z0-9-]+/gi, '')
+          const pageName = pagePath.replace(/[^a-z0-9]+/gi, '')
 
           console.log(`Creating page ${pageName} for ${pagePath}`)
 
