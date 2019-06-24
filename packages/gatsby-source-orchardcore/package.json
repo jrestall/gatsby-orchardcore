@@ -1,0 +1,41 @@
+{
+  "name": "gatsby-source-orchardcore",
+  "description": "Gatsby source plugin for building websites using the Orchard Core CMS as a data source",
+  "version": "2.0.67",
+  "author": "James Restall",
+  "bugs": {
+    "url": "https://github.com/jrestall/gatsby-orchardcore/issues"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.4.5",
+    "chalk": "^2.4.2",
+    "gatsby-source-filesystem": "^2.0.39",
+    "is-online": "^8.2.0",
+    "@hapi/joi": "^15.0.3",
+    "json-stringify-safe": "^5.0.1",
+    "lodash": "^4.17.11",
+    "graphql-request": "^1.8.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "babel-preset-gatsby-package": "^0.1.4",
+    "cross-env": "^5.2.0"
+  },
+  "homepage": "https://github.com/jrestall/gatsby-orchardcore#readme",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "gatsby-source-plugin"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "gatsby": "^2.0.33"
+  },
+  "repository": "https://github.com/jrestall/gatsby-orchardcore",
+  "scripts": {
+    "build": "babel src --out-dir . --ignore **/__tests__",
+    "prepare": "cross-env NODE_ENV=production npm run build",
+    "watch": "babel -w src --out-dir . --ignore **/__tests__"
+  }
+}

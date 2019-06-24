@@ -2,6 +2,7 @@ import fs from 'fs'
 import { writeFileSync } from 'fs-extra'
 import _ from 'lodash'
 import mkdirp from 'mkdirp'
+import slash from 'slash'
 
 export default function buildFlowTemplate(
   name: string,
@@ -10,7 +11,7 @@ export default function buildFlowTemplate(
   store: any,
   getNodesByType: any
 ): string {
-  // Deep search the properties on the contentItem object for 'flowPart'.
+  // Deep search the properties on the contentItem object for a 'flow' property.
   // This will tell us all widgets that are used by this content item so
   // that we can create a unique component and ensure code splitting works.
   const widgets = findWidgets(contentItem)
@@ -27,9 +28,9 @@ export default function buildFlowTemplate(
   const componentTemplate = `
 import React from 'react'
 import { graphql } from 'gatsby'
-import { WidgetProvider } from '${require.resolve('./context/WidgetProvider')}'
-import BaseTemplate from '${baseTemplate}'
-${widgetNodes.map(widget => `import ${widget.name} from '${widget.path}'`)}
+import { WidgetProvider } from '${slash(require.resolve('./context/WidgetProvider'))}'
+import BaseTemplate from '${slash(baseTemplate)}'
+${widgetNodes.map(widget => `import ${widget.name} from '${slash(widget.path)}'`)}
 
 export default function FlowTemplate(props) {
     const widgets = {
@@ -43,11 +44,11 @@ export default function FlowTemplate(props) {
 }
 
 export const query = graphql\`
-  query PageQuery${name}($contentItemId: String!) {
+  query PageQuery${name}($contentItemId: ID!) {
     cms {
-      page(contentItemId: $contentItemId) {
+      page(where: {contentItemId: $contentItemId}) {
         displayText
-        flowPart {
+        flow {
           ...FlowPartWidgets
         }
       }
@@ -87,8 +88,8 @@ function findWidgets(contentItem: any): string[] {
 
   widgets.push(widgetName)
 
-  if (contentItem.flowPart) {
-    const contentWidgets = contentItem.flowPart.widgets
+  if (contentItem.flow) {
+    const contentWidgets = contentItem.flow.widgets
     for (const widget of contentWidgets) {
       const childWidgets = findWidgets(widget)
       if (childWidgets) {

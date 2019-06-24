@@ -1,0 +1,19 @@
+{
+    "name": "gatsby-theme-orchardcore-forms",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "private": false,
+    "dependencies": {
+        "@material-ui/core": "latest",
+        "gatsby-plugin-material-ui": "latest",
+        "gatsby-plugin-styled-components": "latest",
+        "react": "latest",
+        "react-dom": "latest",
+        "gatsby": "latest",
+        "formik": "next"
+    },
+    "devDependencies": {
+
+    }
+}
