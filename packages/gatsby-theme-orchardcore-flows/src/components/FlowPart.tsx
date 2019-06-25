@@ -1,22 +1,5 @@
 import React from 'react'
-import { useWidgets } from '../context/WidgetProvider'
-
-const DEFAULTS = {
-  FlowPart,
-  wrapper: ({ children }) => React.createElement(React.Fragment, {}, children),
-}
-
-export function WidgetElement({ type, ...props }) {
-  const components = useWidgets(null)
-  const Component = components[type] || DEFAULTS[type]
-
-  if (!Component) {
-    console.log(`Couldn't find a widget mapping for the ${type} widget.`)
-    return null
-  }
-
-  return React.createElement(Component, props)
-}
+import ContentItem from './ContentItem';
 
 export function Widgets({ widgets }) {
   if (!widgets) {
@@ -25,7 +8,7 @@ export function Widgets({ widgets }) {
 
   // Loop through all the widget content items and render
   return widgets.map((widget, index) => (
-    <WidgetElement key={index} type={widget.contentType} {...widget} />
+    <ContentItem key={index} contentType={widget.contentType} contentItem={widget} />
   ))
 }
 

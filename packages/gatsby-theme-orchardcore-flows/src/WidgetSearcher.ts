@@ -44,6 +44,8 @@ export default class WidgetSearcher {
   private async parseFile(file: string): Promise<Widget> {
     let widget: Widget
 
+    console.log(`Searching... ${file}`)
+
     // Look through each file for 'export const widget = graphql` fragment n '
     let fileContent
     try {
@@ -54,7 +56,7 @@ export default class WidgetSearcher {
     }
 
     // Extract the widget fragment from the file
-    const widgetRegex = new RegExp('export const widget = graphql`([\\s\\S]*)`')
+    const widgetRegex = new RegExp('\nexport const widget = graphql`([\\s\\S]*)`')
     const widgetResult = fileContent.match(widgetRegex)
     if (!widgetResult) {
       return null
@@ -75,10 +77,14 @@ export default class WidgetSearcher {
   }
 
   private getAllFiles(): string[] {
+    const { themes } = this.store.getState()
+    const themeDirs = this.resolveThemes(themes.themes)
+  
     const filesRegex = path.join(`/**`, `*.+(t|j)s?(x)`)
     let files = [
       path.join(this.basePath, `src`),
       path.join(this.basePath, `.cache`, `fragments`),
+      ...themeDirs
     ].reduce(
       (merged, folderPath) =>
         merged.concat(
@@ -103,5 +109,12 @@ export default class WidgetSearcher {
     files = _.uniq(files)
 
     return files
+  }
+
+  private resolveThemes(themes = []): string[] {
+    return themes.reduce((merged, theme) => {
+      merged.push(theme.themeDir)
+      return merged
+    }, [])
   }
 }

@@ -14,7 +14,7 @@ exports.onPreBootstrap = async ({ store, actions, reporter }) => {
 
   console.log('Searching for widgets...')
 
-  // Find all widgets based on presence of 'export const widget = graphql`'
+  // Find all widgets based on presence of 'export const widget = graphql'
   const widgetSearcher = new WidgetSearcher(program.directory, store, reporter)
   const widgets = await widgetSearcher.find()
 

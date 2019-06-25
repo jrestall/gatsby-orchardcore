@@ -3,7 +3,7 @@ const { createFilePath } = require('gatsby-source-filesystem')
 const path = require('path')
 const fs = require('fs')
 const mkdirp = require('mkdirp')
-const buildFlowTemplate = require('gatsby-theme-orchardcore-flows/src/buildFlowTemplate')
+const createTemplateFile = require('gatsby-theme-orchardcore-flows/src/createTemplateFile')
   .default
 const FlowPartFragment = require('gatsby-theme-orchardcore-flows/src/FlowPartFragment')
   .default
@@ -105,7 +105,7 @@ exports.createPages = ({ store, graphql, actions, getNodesByType }) => {
           console.log(`Creating page ${pageName} for ${pagePath}`)
 
           // Build a unique page template based on the widgets in the current page.
-          const pageTemplate = buildFlowTemplate(
+          const pageTemplate = createTemplateFile(
             pageName,
             baseTemplate,
             page,

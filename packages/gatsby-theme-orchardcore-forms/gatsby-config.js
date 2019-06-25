@@ -9,6 +9,7 @@ module.exports = {
         }
       }
     },
+    'babel-plugin-styled-components',
     'gatsby-plugin-styled-components'
   ],
 }

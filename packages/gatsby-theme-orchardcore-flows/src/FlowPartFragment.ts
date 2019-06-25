@@ -31,11 +31,16 @@ export const query = graphql\`
       return ``
     }
 
-    return `fragment FlowPartWidgets on CMS_FlowPart {
+    // Page is a special case that shouldn't be listed in the widget fragment.
+    const filtered = this.widgets.filter(n =>
+      n.name !== 'Page'
+    )
+
+    return `fragment Widgets on CMS_FlowPart {
       widgets {
         __typename
         contentType
-        ${this.widgets.map(widget => `...${widget.name}`)}
+        ${filtered.map(widget => `...${widget.name}`)}
       }
     }`
   }

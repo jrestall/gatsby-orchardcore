@@ -4,9 +4,8 @@ import _ from 'lodash'
 import mkdirp from 'mkdirp'
 import slash from 'slash'
 
-export default function buildFlowTemplate(
+export default function createTemplateFile(
   name: string,
-  baseTemplate: string,
   contentItem: any,
   store: any,
   getNodesByType: any
@@ -27,34 +26,20 @@ export default function buildFlowTemplate(
   // Output a new component with imports and widget mappings for this specific content item
   const componentTemplate = `
 import React from 'react'
-import { graphql } from 'gatsby'
 import { WidgetProvider } from '${slash(require.resolve('./context/WidgetProvider'))}'
-import BaseTemplate from '${slash(baseTemplate)}'
-${widgetNodes.map(widget => `import ${widget.name} from '${slash(widget.path)}'`)}
+import ContentItem from '${slash(require.resolve('./components/ContentItem'))}'
+${widgetNodes.map(widget => `import ${widget.name} from '${slash(widget.path)}'; `).join('')}
 
 export default function FlowTemplate(props) {
     const widgets = {
-        ${widgetNodes.map(widget => `'${widget.name}':${widget.name},`)}
+        ${widgetNodes.map(widget => `'${widget.name}':${widget.name}`)}
     }
     return (
         <WidgetProvider widgets={widgets}>
-            <BaseTemplate {...props} />
+            <ContentItem contentType={'${contentItem.contentType}'} {...props} />
         </WidgetProvider>
     )
 }
-
-export const query = graphql\`
-  query PageQuery${name}($contentItemId: ID!) {
-    cms {
-      page(where: {contentItemId: $contentItemId}) {
-        displayText
-        flow {
-          ...FlowPartWidgets
-        }
-      }
-    }
-  }
-\`
 `
 
   // Save to cache and return file path

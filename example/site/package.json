@@ -7,12 +7,14 @@
   "license": "MIT",
   "scripts": {
     "develop": "gatsby develop",
-    "build": "gatsby build"
+    "build": "gatsby build",
+    "debug": "node --inspect node_modules/.bin/gatsby develop"
   },
   "dependencies": {
-    "gatsby": "^2.10.0",
+    "gatsby": "^2.10.4",
     "gatsby-theme-orchardcore-flows": "*",
     "gatsby-theme-orchardcore-pages": "*",
+    "gatsby-theme-orchardcore-forms": "*",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
