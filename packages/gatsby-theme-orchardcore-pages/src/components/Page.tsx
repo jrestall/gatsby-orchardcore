@@ -1,9 +1,16 @@
 import { graphql } from 'gatsby'
 import FlowPart from 'gatsby-theme-orchardcore-flows/src/components/FlowPart'
 import React from 'react'
+import Head from "./Head";
+import Layout from './Layout';
 
 export default function Page({ pageContext }) {
-  return <FlowPart part={pageContext.page.flow} />
+  return (
+    <Layout>
+      <Head page={pageContext.page} />
+      <FlowPart part={pageContext.page.flow} />
+    </Layout>
+  )
 }
 
 export const widget = graphql`
@@ -12,8 +19,14 @@ export const widget = graphql`
     contentType
     path
     displayText
+    description
     flow {
-      ...Widgets
+      widgets {
+        ...Widgets
+      }
+    }
+    localization {
+      culture
     }
   }
 `

@@ -36,12 +36,11 @@ export const query = graphql\`
       n.name !== 'Page'
     )
 
-    return `fragment Widgets on CMS_FlowPart {
-      widgets {
-        __typename
-        contentType
-        ${filtered.map(widget => `...${widget.name}`)}
-      }
+    return `
+    fragment Widgets on CMS_ContentItem {
+      __typename
+      contentType
+      ${filtered.map(widget => `...${widget.name}`)}
     }`
   }
 }

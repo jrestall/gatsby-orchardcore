@@ -1,3 +1,4 @@
+import { graphql } from 'gatsby'
 import React from 'react'
 import ContentItem from './ContentItem';
 
@@ -18,3 +19,11 @@ export default function FlowPart({ part }) {
   }
   return <Widgets widgets={part.widgets} />
 }
+
+export const query = graphql`
+  fragment FlowPart on CMS_FlowPart {
+    widgets {
+      ...Widgets  
+    }
+  }
+`

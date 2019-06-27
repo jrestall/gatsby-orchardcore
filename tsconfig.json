@@ -27,5 +27,5 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true
     },
-    "exclude": ["node_modules", "public"]
+    "exclude": ["node_modules", "public", "gatsby-source-orchardcore"]
 }

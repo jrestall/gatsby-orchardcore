@@ -1,18 +1,11 @@
 {
-    "name": "gatsby-theme-orchardcore-pages",
+    "name": "gatsby-theme-orchardcore-layers",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
     "private": false,
     "dependencies": {
-        "react-helmet": "^5.2.1",
         "gatsby-theme-orchardcore-flows":"*"
-    },
-    "devDependencies": {
-        "debug":"^4.1.1",
-        "gatsby-source-filesystem":"^2.1.0",
-        "mkdirp":"^0.5.1",
-        "gatsby-source-graphql":"^2.1.0"
     },
     "peerDependencies": {
         "react":"^16.8.6",
