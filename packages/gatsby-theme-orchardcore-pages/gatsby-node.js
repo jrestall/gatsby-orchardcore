@@ -96,6 +96,7 @@ exports.createPages = ({ store, graphql, actions, getNodesByType, reporter }) =>
           console.log(`Creating page ${page.displayText} for ${pagePath}`)
           
           // Get all active layers for this page
+          // new Function(url, isAuthenticated, isAnonymous, culture, 'return ${rule}');
           const activeLayers = getActiveLayers(layers)
           
           // Get widgets used in zones on this page
