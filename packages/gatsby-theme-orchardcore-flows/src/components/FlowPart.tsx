@@ -9,7 +9,7 @@ export function Widgets({ widgets }) {
 
   // Loop through all the widget content items and render
   return widgets.map((widget, index) => (
-    <ContentItem key={index} contentType={widget.contentType} contentItem={widget} />
+    <ContentItem key={index} contentItem={widget} />
   ))
 }
 

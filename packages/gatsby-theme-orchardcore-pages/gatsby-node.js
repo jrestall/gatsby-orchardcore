@@ -3,7 +3,7 @@ const { createFilePath } = require('gatsby-source-filesystem')
 const path = require('path')
 const fs = require('fs')
 const mkdirp = require('mkdirp')
-const createTemplateFile = require('gatsby-theme-orchardcore-flows/src/createTemplateFile')
+const createPageTemplate = require('gatsby-theme-orchardcore-flows/src/createPageTemplate')
   .default
 const FlowPartFragment = require('gatsby-theme-orchardcore-flows/src/FlowPartFragment')
   .default
@@ -94,12 +94,22 @@ exports.createPages = ({ store, graphql, actions, getNodesByType, reporter }) =>
 
           const pagePath = page.path
           console.log(`Creating page ${page.displayText} for ${pagePath}`)
+          
+          // Get all active layers for this page
+          const activeLayers = getActiveLayers(layers)
+          
+          // Get widgets used in zones on this page
+          const additionalWidgets = getWidgetsFromLayers(activeLayers)
+
+          // Group and order the widgets into named zones 
+          const zones = getZonesFromLayers(activeLayers)
 
           // Build a unique page template based on the widgets in the current page.
           const pageName = pagePath.replace(/[^a-z0-9]+/gi, '')
-          const pageTemplate = createTemplateFile(
+          const pageTemplate = createPageTemplate(
             pageName,
             page,
+            //additionalWidgets,
             store,
             getNodesByType
           )
@@ -110,6 +120,7 @@ exports.createPages = ({ store, graphql, actions, getNodesByType, reporter }) =>
             context: {
               contentItemId: page.contentItemId,
               page: page,
+              zones: zones
             },
             path: pagePath,
           })

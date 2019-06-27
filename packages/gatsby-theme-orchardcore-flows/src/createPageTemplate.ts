@@ -30,13 +30,13 @@ import { WidgetProvider } from '${slash(require.resolve('./context/WidgetProvide
 import ContentItem from '${slash(require.resolve('./components/ContentItem'))}'
 ${widgetNodes.map(widget => `import ${widget.name} from '${slash(widget.path)}'; `).join('')}
 
-export default function FlowTemplate(props) {
+export default function PageTemplate(props) {
     const widgets = {
         ${widgetNodes.map(widget => `'${widget.name}':${widget.name}`)}
     }
     return (
         <WidgetProvider widgets={widgets}>
-            <ContentItem contentType={'${contentItem.contentType}'} {...props} />
+            <ContentItem contentItem={props.pageContext.page} {...props} />
         </WidgetProvider>
     )
 }
@@ -44,7 +44,7 @@ export default function FlowTemplate(props) {
 
   // Save to cache and return file path
   const program = store.getState().program
-  const flowTemplatesDir = `${program.directory}/.cache/flow-templates`
+  const flowTemplatesDir = `${program.directory}/.cache/page-templates`
   ensureDirectory(flowTemplatesDir)
 
   const templatePath = `${flowTemplatesDir}/${name}.jsx`

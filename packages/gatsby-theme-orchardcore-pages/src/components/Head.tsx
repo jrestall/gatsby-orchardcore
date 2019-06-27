@@ -26,14 +26,14 @@ export default ({page}) => {
         <meta property="og:url" content={baseUrl} />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={page.description} />
-        <meta property="og:image" content={image} />
+        <meta property="og:image" content={imageUrl} />
         
         {/* <!-- Twitter --> */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={baseUrl} />
         <meta property="twitter:title" content={metaTitle} />
         <meta property="twitter:description" content={page.description} />
-        <meta property="twitter:image" content={image}/>
+        <meta property="twitter:image" content={imageUrl}/>
 
       </Helmet>
     )
