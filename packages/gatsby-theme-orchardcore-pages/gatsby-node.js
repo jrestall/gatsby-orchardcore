@@ -7,6 +7,7 @@ const createPageTemplate = require('gatsby-theme-orchardcore-flows/src/createPag
   .default
 const FlowPartFragment = require('gatsby-theme-orchardcore-flows/src/FlowPartFragment')
   .default
+const apiRunnerNode = require(`gatsby/dist/utils/api-runner-node`)
 
 // make sure src/pages exists for the filesystem source or it will error
 exports.onPreBootstrap = ({ store }) => {
@@ -53,6 +54,7 @@ exports.createPages = ({ store, graphql, actions, getNodesByType, reporter }) =>
   const { createPage } = actions
 
   const widgets = getNodesByType(`Widget`)
+  apiRunnerNode(`sourcePageQuery`)
   const flowPartFragment = new FlowPartFragment(widgets)
   const fragment = flowPartFragment.toString()
 
@@ -97,13 +99,14 @@ exports.createPages = ({ store, graphql, actions, getNodesByType, reporter }) =>
           
           // Get all active layers for this page
           // new Function(url, isAuthenticated, isAnonymous, culture, 'return ${rule}');
-          const activeLayers = getActiveLayers(layers)
+          //const activeLayers = getActiveLayers(layers)
           
           // Get widgets used in zones on this page
-          const additionalWidgets = getWidgetsFromLayers(activeLayers)
+          //const additionalWidgets = getWidgetsFromLayers(activeLayers)
 
           // Group and order the widgets into named zones 
-          const zones = getZonesFromLayers(activeLayers)
+          //const zones = getZonesFromLayers(activeLayers)
+          apiRunnerNode(`onCreatingTemplate`)
 
           // Build a unique page template based on the widgets in the current page.
           const pageName = pagePath.replace(/[^a-z0-9]+/gi, '')
@@ -116,12 +119,15 @@ exports.createPages = ({ store, graphql, actions, getNodesByType, reporter }) =>
           )
 
           debug('creating', pagePath)
+
+          apiRunnerNode(`onCreatingPage`)
+
           createPage({
             component: pageTemplate,
             context: {
               contentItemId: page.contentItemId,
               page: page,
-              zones: zones
+              //zones: zones
             },
             path: pagePath,
           })

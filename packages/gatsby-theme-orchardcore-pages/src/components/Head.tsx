@@ -18,7 +18,7 @@ export default ({page}) => {
 
         {/* <!-- Localization Meta Tags --> */}
         {cultures.map((culture) => 
-          <link rel="alternate" href={`${baseUrl}${page.path}`} hrefLang={culture.locale} key={culture.locale} />
+          <link rel="alternate" href={`${baseUrl}${page.path}`} hrefLang={culture.culture} key={culture.culture} />
         )}
 
         {/* <!-- Open Graph / Facebook --> */}

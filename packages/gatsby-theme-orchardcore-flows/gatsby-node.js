@@ -5,6 +5,10 @@ const WidgetSearcher = require('./src/WidgetSearcher').default
 const WidgetStore = require('./src/WidgetStore').default
 const FlowPartFragment = require('./src/FlowPartFragment').default
 
+exports.sourcePageQuery = ({ store, actions, reporter }) => {
+  console.log('sourcePageQuery!')
+}
+
 /**
  * Finds all widget fragments and automatically includes them in the FlowPart fragment.
  */

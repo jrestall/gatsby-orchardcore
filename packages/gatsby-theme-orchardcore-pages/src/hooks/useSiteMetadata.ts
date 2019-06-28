@@ -13,7 +13,7 @@ export const useSiteMetadata = () => {
             }
           }
           siteCultures {
-            locale
+            culture
             default
           }
         }
