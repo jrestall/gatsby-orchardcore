@@ -72,7 +72,7 @@ exports.createPages = ({ store, graphql, actions, getNodesByType, reporter }) =>
 
   console.log(`Page Query: ${pageQuery}`)
 
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     resolve(
       graphql(pageQuery).then(result => {
         if (result.errors) {
@@ -93,20 +93,14 @@ exports.createPages = ({ store, graphql, actions, getNodesByType, reporter }) =>
           if (!page) {
             return
           }
+   
+          await apiRunnerNode(`onCreatingTemplate`, {
+            page,
+            widgets
+          })
 
           const pagePath = page.path
-          console.log(`Creating page ${page.displayText} for ${pagePath}`)
-          
-          // Get all active layers for this page
-          // new Function(url, isAuthenticated, isAnonymous, culture, 'return ${rule}');
-          //const activeLayers = getActiveLayers(layers)
-          
-          // Get widgets used in zones on this page
-          //const additionalWidgets = getWidgetsFromLayers(activeLayers)
-
-          // Group and order the widgets into named zones 
-          //const zones = getZonesFromLayers(activeLayers)
-          apiRunnerNode(`onCreatingTemplate`)
+          console.log(`Creating page template ${page.displayText} for ${pagePath}`)
 
           // Build a unique page template based on the widgets in the current page.
           const pageName = pagePath.replace(/[^a-z0-9]+/gi, '')

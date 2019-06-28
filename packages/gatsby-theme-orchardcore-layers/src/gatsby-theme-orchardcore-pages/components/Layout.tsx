@@ -1,18 +1,17 @@
 
 import React from 'react'
 import LayerLayout from '../../components/Layout'
-import { LayerProvider } from '../../context/LayerProvider'
-import useSiteLayers from '../../hooks/useSiteLayers'
+import { ZoneProvider } from '../../context/ZoneProvider'
 
-export default function Layout({ children }) {
-  const siteLayers = useSiteLayers()
+export default function Layout({ pageContext, children }) {
+  const zones = pageContext.page.zones
   return (
     <>
-      <LayerProvider layers={siteLayers}>
+      <ZoneProvider zones={zones}>
         <LayerLayout>
           {children}
         </LayerLayout>
-      </LayerProvider>
+      </ZoneProvider>
     </>
   )
 }
