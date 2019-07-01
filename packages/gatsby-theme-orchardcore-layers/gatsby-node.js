@@ -1,4 +1,4 @@
-exports.onCreatingTemplate = async ({ page, result, addWidget, graphql }) => {
+exports.onCreatingTemplate = async ({ result, addWidget, graphql, setPageContext }) => {
   console.log('gatsby-theme-orchardcore-layers:onCreatingTemplate')
 
   if(!result.data.cms.siteLayers) {
@@ -21,7 +21,7 @@ exports.onCreatingTemplate = async ({ page, result, addWidget, graphql }) => {
 
   // Group and order the widgets into named zones 
   const zones = getZonesFromLayers(activeLayers)
-  page.zones = zones
+  setPageContext({zones})
 }
 
 exports.sourcePageQuery = async ({ addOperations }) => {
@@ -59,7 +59,7 @@ function getWidgetsFromLayers(layers) {
 }
 
 function getZonesFromLayers(layers) {
-  const zones = new Map()
+  const zones = new Object()
   layers.forEach(layer => {
     layer.widgets.forEach(layerWidget => {
       const zone = layerWidget.zone
@@ -73,14 +73,14 @@ function getZonesFromLayers(layers) {
 }
 
 function addToZone(zones, name, position, widget) {
-  let zone = zones.get(name)
+  let zone = zones[name]
   if(zone) {
     // Add widget to the correct position in the existing zone
     zone.push({position, widget})
     zone.sort(comparePosition)
   } else {
     // Create the Zone
-    zones.set(name, [{position, widget}])
+    zones[name] = [{position, widget}]
   }
 }
 
@@ -95,7 +95,7 @@ function comparePosition(a, b) {
 }
 
 function getActiveLayers(layers) {
-  // TODO: Filterbased on layer.rule using new Function(url, isAuthenticated, isAnonymous, culture, 'return ${rule}');
+  // TODO: Filter based on layer.rule using new Function(url, isAuthenticated, isAnonymous, culture, 'return ${rule}');
   return layers
 }
 

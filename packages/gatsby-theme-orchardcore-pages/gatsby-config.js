@@ -19,6 +19,8 @@ module.exports = _ => {
           fieldName: 'cms',
           // Url to query from
           url: 'http://localhost:5000/api/graphql',
+          // refetch interval in seconds
+          refetchInterval: 90,
         },
       },
     ],

@@ -8,9 +8,8 @@ export const useZones = () => {
 }
 
 export const ZoneProvider = props => {
-  const allZones = useZones()
   return (
-    <ZoneContext.Provider value={allZones}>
+    <ZoneContext.Provider value={props.zones}>
       {props.children}
     </ZoneContext.Provider>
   )

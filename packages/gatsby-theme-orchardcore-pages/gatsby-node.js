@@ -73,13 +73,16 @@ exports.createPages = async ({ store, graphql, actions, getNodesByType, reporter
       return
     }
     
+    let pageContext = {}
+    const setPageContext = context => pageContext = { ...pageContext, ...context }
     const widgets = []
     const addWidget = widget => widgets.push(widget)
     await apiRunnerNode(`onCreatingTemplate`, {
       page,
       result,
       addWidget,
-      graphql
+      graphql,
+      setPageContext
     })
 
     const pagePath = page.path
@@ -108,7 +111,7 @@ exports.createPages = async ({ store, graphql, actions, getNodesByType, reporter
       component: templatePath,
       context: {
         contentItemId: page.contentItemId,
-        page: page
+        page: { ...page, ...pageContext }
       },
       path: pagePath,
     })
