@@ -4,10 +4,7 @@ const Debug = require('debug')
 const WidgetSearcher = require('./src/WidgetSearcher').default
 const WidgetStore = require('./src/WidgetStore').default
 const FlowPartFragment = require('./src/FlowPartFragment').default
-
-exports.sourcePageQuery = ({ store, actions, reporter }) => {
-  console.log('sourcePageQuery!')
-}
+const createPageTemplate = require('./src/createPageTemplate').default
 
 /**
  * Finds all widget fragments and automatically includes them in the FlowPart fragment.
@@ -43,6 +40,26 @@ exports.onPreBootstrap = async ({ store, actions, reporter }) => {
   await fragment.saveToDisk(
     `${program.directory}/.cache/fragments/orchardcore-flows-fragments.js`
   )
+}
+
+exports.sourcePageQuery = async ({ addFragments, getNodesByType }) => {
+  const debug = Debug('gatsby-theme-orchardcore-flows:sourcePageQuery')
+
+  const widgets = getNodesByType(`Widget`)
+
+  const flowPartFragment = new FlowPartFragment(widgets)
+  const fragment = flowPartFragment.toString()
+
+  const fragments = `
+        ${widgets.map(widget => widget.fragment).join('')}
+        ${fragment}`
+
+  addFragments(fragments)
+}
+
+exports.createPageTemplate = async({page, widgets, getNodesByType, setPageTemplate}) => {
+  const pageTemplate = createPageTemplate(page, widgets, getNodesByType)
+  setPageTemplate(pageTemplate)
 }
 
 /**

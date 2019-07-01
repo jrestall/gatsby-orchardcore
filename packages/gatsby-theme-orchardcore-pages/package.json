@@ -13,7 +13,8 @@
         "mkdirp":"^0.5.1",
         "gatsby-source-graphql":"^2.1.0",
         "gatsby-source-filesystem":"^2.1.0",
-        "gatsby-theme-orchardcore-flows": "*"
+        "gatsby-theme-orchardcore-flows": "*",
+        "fs-extra":"^8.1.0"
     },
     "peerDependencies": {
         "react":"^16.8.6",

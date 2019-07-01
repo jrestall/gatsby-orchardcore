@@ -20,5 +20,5 @@ export const useSiteMetadata = () => {
       }
     `
   )
-  return cms.site
+  return { ...cms.site[0], cultures: cms.siteCultures }
 }
