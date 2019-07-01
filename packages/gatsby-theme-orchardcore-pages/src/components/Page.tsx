@@ -20,6 +20,9 @@ export const widget = graphql`
     path
     displayText
     description
+    background {
+      urls
+    }
     flow {
       widgets {
         ...Widgets

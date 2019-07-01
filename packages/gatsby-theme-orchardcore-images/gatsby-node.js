@@ -1,3 +1,6 @@
+const Debug = require('debug')
+const path = require('path')
+
 /**
  * When shipping NPM modules, they typically need to be either
  * pre-compiled or the user needs to add bundler config to process the
@@ -34,17 +37,22 @@ exports.sourcePageQuery = ({ addOperations }) => {
         node {
           id
           fluid(maxWidth: 4160, quality: 100) {
-            ...GatsbyImageSharpFluid
+            originalName
+            base64
+            aspectRatio
+            src
+            srcSet
+            sizes
           }
         }
       }
     }`)
 }
 
-exports.onCreatingPage = async ({ result, page }) => {
+exports.onCreatingPage = async ({ result, page, setPage }) => {
   const debug = Debug('gatsby-theme-orchardcore-images:onCreatingPage')
 
-  if(result.data.allImageSharp) {
+  if(!result.data.allImageSharp) {
     console.warn(`gatsby-theme-orchardcore-images couldn't retrieve the local images!`)
     return
   }
@@ -59,6 +67,7 @@ exports.onCreatingPage = async ({ result, page }) => {
   // object as an additional property on the image. The image can then be 
   // used with gatsby-image.
   appendGatsbyImages(images, page)
+  setPage(page)
 }
 
 function appendGatsbyImages(images, page) {
@@ -73,19 +82,16 @@ function appendGatsbyImages(images, page) {
 
 function appendImages(images, pageImages) {
   for(let image of pageImages) {
-    // Ensure has urls property 
-    if(!image.hasOwnProperty('urls')){
-      continue
-    }
-
     // Ensure urls property is an array
     const imageUrls = image.urls
     if(!Array.isArray(imageUrls)) {
+      console.log('not array')
       continue
     }
 
     // Ensure there is a url specified
-    if(!imageUrls.length <= 0) {
+    if(imageUrls.length <= 0) {
+      console.log('no urls')
       continue
     }
 
@@ -93,32 +99,34 @@ function appendImages(images, pageImages) {
     const imageName = getImageNameFromUrl(imageUrl)
 
     // Find page image in all stored images
-    const foundImage = images.find(img => img.node.fluid.originalName === `${imageName}`)
+    const foundImage = images.find(img => {
+      console.log(`${img.node.fluid.originalName}==${imageName}`)
+      return (img.node.fluid.originalName === `${imageName}.png`)
+    })
 
     // Add fluid property to image object
-    if(foundImage) {
+    if (foundImage) {
       image.fluid = foundImage
+    }else{
+      console.log('not found')
     }
+    
   }
 }
 
 function findImages(object, propName) {
   var images = []
+  // tslint:disable-next-line: forin
   for (var key in object) {
-    // Make sure we don't iterate over the prototype properties.
-    if(!object.hasOwnProperty(key)) { 
-      continue 
-    }
-    
     if (key === propName) {
       images.push(object);
       break
     }
 
-    if (object[key] && typeof object[k] === 'object') {
-      const nestedImages = findImages(object[k], propName);
-      if(nestedImages) {
-        images.push(nestedImages)
+    if (object[key] && typeof object[key] === 'object') {
+      const nestedImages = findImages(object[key], propName);
+      if(nestedImages && nestedImages.length >= 1) {
+        images = [...nestedImages, ...images]
       }
     }
   }

@@ -3,9 +3,9 @@ const _ = require(`lodash`)
 const stringify = require(`json-stringify-safe`)
 const crypto = require(`crypto`)
 
-const fetchData = require(`./fetch`)
-const { createPluginConfig, validateOptions } = require(`./plugin-options`)
-const { downloadOrchardCoreAssets } = require(`./download-assets`)
+const fetchData = require(`./src/fetch`)
+const { createPluginConfig, validateOptions } = require(`./src/plugin-options`)
+const { downloadOrchardCoreAssets } = require(`./src/download-assets`)
 
 exports.onPreBootstrap = validateOptions
 

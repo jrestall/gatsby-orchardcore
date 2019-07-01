@@ -44,7 +44,11 @@ export default class WidgetSearcher {
   private async parseFile(file: string): Promise<Widget> {
     let widget: Widget
 
-    console.log(`Searching... ${file}`)
+    if(!file) {
+      return null
+    }
+
+    // console.log(`Searching... ${file}`)
 
     // Look through each file for 'export const widget = graphql` fragment n '
     let fileContent

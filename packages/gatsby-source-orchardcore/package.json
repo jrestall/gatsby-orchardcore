@@ -7,20 +7,22 @@
     "url": "https://github.com/jrestall/gatsby-orchardcore/issues"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.5",
-    "chalk": "^2.4.2",
-    "gatsby-source-filesystem": "^2.0.39",
-    "is-online": "^8.2.0",
-    "@hapi/joi": "^15.0.3",
-    "json-stringify-safe": "^5.0.1",
-    "lodash": "^4.17.11",
-    "graphql-request": "^1.8.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
     "babel-preset-gatsby-package": "^0.1.4",
-    "cross-env": "^5.2.0"
+    "cross-env": "^5.2.0",
+    "@babel/runtime": "^7.4.5",
+    "chalk": "^2.4.2",
+    "gatsby-source-filesystem": "^2.0.39",
+    "gatsby-plugin-sharp": "^2.2.1",
+    "gatsby-transformer-sharp": "^2.2.0",
+    "is-online": "^8.2.0",
+    "@hapi/joi": "^15.0.3",
+    "json-stringify-safe": "^5.0.1",
+    "lodash": "^4.17.11",
+    "graphql-request": "^1.8.2"
   },
   "homepage": "https://github.com/jrestall/gatsby-orchardcore#readme",
   "keywords": [

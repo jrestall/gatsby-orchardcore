@@ -15,6 +15,7 @@
     "gatsby-theme-orchardcore-pages": "*",
     "gatsby-theme-orchardcore-forms": "*",
     "gatsby-theme-orchardcore-layers": "*",
+    "gatsby-theme-orchardcore-images": "*",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },

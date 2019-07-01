@@ -8,7 +8,7 @@
 
     },
     "devDependencies": {
-
+        "gatsby-source-orchardcore": "*"
     },
     "peerDependencies": {
         "react":"^16.8.6",
