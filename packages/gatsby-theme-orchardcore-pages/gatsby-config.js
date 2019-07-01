@@ -5,6 +5,7 @@ module.exports = _ => {
   // Tell gatsby to allow these non-standard API calls
   apiList.sourcePageQuery = true
   apiList.onCreatingTemplate = true
+  apiList.createPageTemplate = true
   apiList.onCreatingPage = true
 
   return ({

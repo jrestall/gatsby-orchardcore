@@ -1,0 +1,17 @@
+{
+    "name": "gatsby-theme-orchardcore-images",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "private": false,
+    "dependencies": {
+
+    },
+    "devDependencies": {
+
+    },
+    "peerDependencies": {
+        "react":"^16.8.6",
+        "gatsby": "^2.6.0"
+    }
+}

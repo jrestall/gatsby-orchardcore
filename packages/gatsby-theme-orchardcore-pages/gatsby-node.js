@@ -3,25 +3,8 @@ const { createFilePath } = require('gatsby-source-filesystem')
 const path = require('path')
 const fs = require('fs')
 const mkdirp = require('mkdirp')
-const createPageTemplate = require('gatsby-theme-orchardcore-flows/src/createPageTemplate')
-  .default
-const FlowPartFragment = require('gatsby-theme-orchardcore-flows/src/FlowPartFragment')
-  .default
 const apiRunnerNode = require(`gatsby/dist/utils/api-runner-node`)
-
-// make sure src/pages exists for the filesystem source or it will error
-exports.onPreBootstrap = ({ store }) => {
-  const debug = Debug('gatsby-theme-orchardcore-pages:onPreBoostrap')
-
-  const { program } = store.getState()
-  const dir = `${program.directory}/src/pages`
-  debug(`ensuring ${dir} exists`)
-
-  if (!fs.existsSync(dir)) {
-    debug(`creating ${dir}`)
-    mkdirp.sync(dir)
-  }
-}
+const { writeFileSync } = require('fs-extra')
 
 /**
  * When shipping NPM modules, they typically need to be either
@@ -48,85 +31,104 @@ exports.onCreateWebpackConfig = ({ stage, loaders, plugins, actions }) => {
   })
 }
 
-exports.createPages = ({ store, graphql, actions, getNodesByType, reporter }) => {
+exports.createPages = async ({ store, graphql, actions, getNodesByType, reporter }) => {
   const debug = Debug('gatsby-theme-orchardcore-pages:createPages')
-
   const { createPage } = actions
 
-  const widgets = getNodesByType(`Widget`)
-  apiRunnerNode(`sourcePageQuery`)
-  const flowPartFragment = new FlowPartFragment(widgets)
-  const fragment = flowPartFragment.toString()
+  let pageQuery = ''
+  let queryOperations = ``
+    
+  const addFragments = fragments => pageQuery += fragments
+  const addOperations = operations => queryOperations += operations
+  await apiRunnerNode(`sourcePageQuery`, { addFragments, addOperations })
 
-  const pageQuery = `
-        ${widgets.map(widget => widget.fragment)}
-        ${fragment}
-        {
-            cms {
-                page(status: PUBLISHED) {
-                    ...Page
-                }
-            }
+  pageQuery += `
+    query PageQuery {
+      cms { 
+        page(status: PUBLISHED) {
+          ...Page
         }
-    `
+      }
+      ${queryOperations}
+    }`
 
-  console.log(`Page Query: ${pageQuery}`)
+  console.log(`Built page query: ${pageQuery}`)
 
-  return new Promise(async (resolve, reject) => {
-    resolve(
-      graphql(pageQuery).then(result => {
-        if (result.errors) {
-          console.log(result.errors)
-          reject(result.errors)
-        }
+  const result = await graphql(pageQuery)
 
-        if (!result.data || !result.data.cms) {
-          reporter.panic('Could not query the CMS for pages!')
-          reject()
-          return
-        }
+  if (result.errors) {
+    console.log(result.errors)
+    throw new Error(result.errors)
+  }
 
-        console.log('Building CMS pages.')
+  if (!result.data || !result.data.cms) {
+    reporter.panic('Could not query the CMS for pages!')
+    return
+  }
 
-        const pages = result.data.cms.page
-        pages.forEach((page, index) => {
-          if (!page) {
-            return
-          }
-   
-          await apiRunnerNode(`onCreatingTemplate`, {
-            page,
-            widgets
-          })
+  console.log('Building CMS pages.')
+  const pages = result.data.cms.page
+  for(let page of pages) {
+    if (!page) {
+      return
+    }
+    
+    const widgets = []
+    const addWidget = widget => widgets.push(widget)
+    await apiRunnerNode(`onCreatingTemplate`, {
+      page,
+      result,
+      addWidget,
+      graphql
+    })
 
-          const pagePath = page.path
-          console.log(`Creating page template ${page.displayText} for ${pagePath}`)
+    const pagePath = page.path
+    console.log(`Creating page template ${page.displayText} for ${pagePath}`)
+    
+    // Build a unique page template based on the widgets in the current page.
+    let pageTemplate = ''
+    const setPageTemplate = template => pageTemplate += template
+    await apiRunnerNode(`createPageTemplate`, {
+      page,
+      widgets,
+      setPageTemplate
+    })
 
-          // Build a unique page template based on the widgets in the current page.
-          const pageName = pagePath.replace(/[^a-z0-9]+/gi, '')
-          const pageTemplate = createPageTemplate(
-            pageName,
-            page,
-            //additionalWidgets,
-            store,
-            getNodesByType
-          )
+    if(!pageTemplate || pageTemplate.length <= 0) {
+      console.log(`Couldn't create page template for ${pagePath}`)
+      return
+    }
 
-          debug('creating', pagePath)
+    const pageName = pagePath.replace(/[^a-z0-9]+/gi, '')
+    const templatePath = savePageTemplate(pageName, pageTemplate, store)
 
-          apiRunnerNode(`onCreatingPage`)
+    await apiRunnerNode(`onCreatingPage`, { result, page })
 
-          createPage({
-            component: pageTemplate,
-            context: {
-              contentItemId: page.contentItemId,
-              page: page,
-              //zones: zones
-            },
-            path: pagePath,
-          })
-        })
-      })
-    )
-  })
+    createPage({
+      component: templatePath,
+      context: {
+        contentItemId: page.contentItemId,
+        page: page
+      },
+      path: pagePath,
+    })
+  }
+}
+
+function savePageTemplate(name, pageTemplate, store) {
+  // Save to cache and return file path
+  const program = store.getState().program
+  const pageTemplatesDir = `${program.directory}/.cache/page-templates`
+  ensureDirectory(pageTemplatesDir)
+
+  const templatePath = `${pageTemplatesDir}/${name}.jsx`
+  writeFileSync(templatePath, pageTemplate)
+
+  return templatePath
+}
+
+function ensureDirectory(dir) {
+  if (!fs.existsSync(dir)) {
+    mkdirp.sync(dir)
+  }
 }
