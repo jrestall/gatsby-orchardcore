@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "gatsby": "^2.10.4",
+    "gatsby-image": "^2.2.3",
     "gatsby-theme-orchardcore-pages": "*",
     "gatsby-theme-orchardcore-forms": "*",
     "gatsby-theme-orchardcore-layers": "*",

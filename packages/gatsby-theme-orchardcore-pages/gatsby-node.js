@@ -105,14 +105,15 @@ exports.createPages = async ({ store, graphql, actions, getNodesByType, reporter
     const pageName = pagePath.replace(/[^a-z0-9]+/gi, '')
     const templatePath = savePageTemplate(pageName, pageTemplate, store)
 
-    const setPage = p => page = p
-    await apiRunnerNode(`onCreatingPage`, { result, page, setPage })
+    let builtPage = { ...page, ...pageContext }
+    const setPage = p => builtPage = p
+    await apiRunnerNode(`onCreatingPage`, { result, page: builtPage, setPage })
 
     createPage({
       component: templatePath,
       context: {
         contentItemId: page.contentItemId,
-        page: { ...page, ...pageContext }
+        page: builtPage
       },
       path: pagePath,
     })

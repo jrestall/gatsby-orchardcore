@@ -85,13 +85,13 @@ function appendImages(images, pageImages) {
     // Ensure urls property is an array
     const imageUrls = image.urls
     if(!Array.isArray(imageUrls)) {
-      console.log('not array')
+      console.log('Image urls property was not an array.')
       continue
     }
 
     // Ensure there is a url specified
     if(imageUrls.length <= 0) {
-      console.log('no urls')
+      console.log('No urls exist on image object.')
       continue
     }
 
@@ -100,17 +100,16 @@ function appendImages(images, pageImages) {
 
     // Find page image in all stored images
     const foundImage = images.find(img => {
-      console.log(`${img.node.fluid.originalName}==${imageName}`)
-      return (img.node.fluid.originalName === `${imageName}.png`)
+      return (img.node.fluid.originalName === `${imageName}`)
     })
 
     // Add fluid property to image object
     if (foundImage) {
-      image.fluid = foundImage
+      image.fluid = foundImage.node.fluid
+      console.log(`${imageName} found.`)
     }else{
-      console.log('not found')
+      console.log(`${imageName} not found.`)
     }
-    
   }
 }
 

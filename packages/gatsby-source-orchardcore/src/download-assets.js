@@ -62,8 +62,7 @@ const downloadOrchardCoreAssets = async gatsbyFunctions => {
             store,
             cache,
             createNode,
-            createNodeId,
-            name: node.name,
+            createNodeId
           })
 
           if (fileNode) {

@@ -12,6 +12,11 @@ exports.onCreatingTemplate = async ({ result, addWidget, graphql, setPageContext
   // Get all active layers for this page
   const activeLayers = getActiveLayers(layers)
   
+  if(!activeLayers) {
+    console.log(`No active layers found.`)
+    return
+  }
+  
   // Get the widget names used in zones on this page
   const widgets = getWidgetsFromLayers(activeLayers)
   
