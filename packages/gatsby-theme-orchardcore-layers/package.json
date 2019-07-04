@@ -9,6 +9,6 @@
     },
     "peerDependencies": {
         "react":"^16.8.6",
-        "gatsby": "^2.6.0"
+        "gatsby": "^2.13.3"
     }
 }

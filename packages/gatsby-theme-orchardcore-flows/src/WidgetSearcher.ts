@@ -81,8 +81,16 @@ export default class WidgetSearcher {
   }
 
   private getAllFiles(): string[] {
-    const { themes } = this.store.getState()
-    const themeDirs = this.resolveThemes(themes.themes)
+    const { themes, flattenedPlugins } = this.store.getState()
+    const themeDirs = this.resolveThemes(
+      themes.themes
+      ? themes.themes
+      : flattenedPlugins.map(plugin => {
+          return {
+            themeDir: plugin.resolve,
+          }
+        })
+    )
   
     const filesRegex = path.join(`/**`, `*.+(t|j)s?(x)`)
     let files = [

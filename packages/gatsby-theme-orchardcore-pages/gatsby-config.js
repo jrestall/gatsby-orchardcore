@@ -23,9 +23,7 @@ module.exports = _ => {
           refetchInterval: 120,
         },
       },
-    ],
-    __experimentalThemes: [
-      "gatsby-theme-orchardcore-flows"
-    ],
+      'gatsby-theme-orchardcore-flows'
+    ]
   })
 }

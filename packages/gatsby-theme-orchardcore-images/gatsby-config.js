@@ -9,7 +9,7 @@ module.exports = _ => {
   apiList.onCreatingPage = true
 
   return ({
-    __experimentalThemes: [
+    plugins: [
       {
         resolve: 'gatsby-source-orchardcore',
         options: {

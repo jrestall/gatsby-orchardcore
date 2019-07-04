@@ -36,7 +36,7 @@ exports.createPages = async ({ store, graphql, actions, getNodesByType, reporter
   const { createPage } = actions
 
   let pageQuery = ''
-  let queryOperations = ``
+  let queryOperations = ''
     
   const addFragments = fragments => pageQuery += fragments
   const addOperations = operations => queryOperations += operations
