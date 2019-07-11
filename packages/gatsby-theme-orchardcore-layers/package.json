@@ -5,10 +5,11 @@
     "license": "MIT",
     "private": false,
     "dependencies": {
-        "gatsby-theme-orchardcore-flows":"*"
+        "gatsby-theme-orchardcore-contents": "*",
+        "gatsby-theme-orchardcore-flows": "*"
     },
     "peerDependencies": {
-        "react":"^16.8.6",
-        "gatsby": "^2.6.0"
+        "react": "^16.8.6",
+        "gatsby": "^2.13.13"
     }
 }

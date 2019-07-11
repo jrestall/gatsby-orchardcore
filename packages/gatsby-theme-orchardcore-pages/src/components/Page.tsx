@@ -1,14 +1,15 @@
 import { graphql } from 'gatsby'
-import FlowPart from 'gatsby-theme-orchardcore-flows/src/components/FlowPart'
+import { FlowPart } from 'gatsby-theme-orchardcore-flows'
 import React from 'react'
-import Head from "./Head";
-import Layout from './Layout';
+import Head from './Head'
+import Layout from './Layout'
 
 export default function Page({ pageContext }) {
+  const page = pageContext.contentItem
   return (
     <Layout pageContext={pageContext}>
-      <Head page={pageContext.page} />
-      <FlowPart part={pageContext.page.flow} />
+      <Head page={page} />
+      <FlowPart part={page.flow} />
     </Layout>
   )
 }

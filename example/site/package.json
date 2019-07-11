@@ -11,12 +11,12 @@
     "debug": "node --inspect node_modules/.bin/gatsby develop"
   },
   "dependencies": {
-    "gatsby": "^2.10.4",
-    "gatsby-image": "^2.2.3",
+    "gatsby": "^2.13.13",
+    "gatsby-image": "^2.2.4",
     "gatsby-theme-orchardcore-pages": "*",
     "gatsby-theme-orchardcore-forms": "*",
     "gatsby-theme-orchardcore-layers": "*",
-    "gatsby-theme-orchardcore-images": "*",
+    "gatsby-theme-orchardcore-media": "*",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },

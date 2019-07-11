@@ -1,6 +1,6 @@
 import { graphql } from 'gatsby'
+import { ContentItem } from 'gatsby-theme-orchardcore-contents'
 import React from 'react'
-import ContentItem from './ContentItem';
 
 export function Widgets({ widgets }) {
   if (!widgets) {

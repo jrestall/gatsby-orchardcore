@@ -1,4 +1,4 @@
-import ContentItem from 'gatsby-theme-orchardcore-flows/src/components/ContentItem';
+import { ContentItem } from 'gatsby-theme-orchardcore-contents';
 import React from 'react'
 import { useZones } from '../context/ZoneProvider'
 

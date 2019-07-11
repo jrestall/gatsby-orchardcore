@@ -1,10 +1,18 @@
 import { writeFileSync } from 'fs-extra'
-import { Widget } from './types'
+import { WidgetDefinition } from './types'
 
+// Creates the Widgets graphql fragment based on all the found widgets.
+// e.g.
+// fragment Widgets on CMS_ContentItem {
+//  ...Button
+//  ...Form
+//  ...Paragraph
+// }
+// This can then be used to query for all widgets and their details on a content item.
 export default class FlowPartFragment {
-  widgets: Widget[]
+  widgets: WidgetDefinition[]
 
-  constructor(widgets: Widget[]) {
+  constructor(widgets: WidgetDefinition[]) {
     this.widgets = widgets
   }
 
@@ -20,10 +28,7 @@ export default class FlowPartFragment {
   private buildFragmentFile(): string {
     return `import { graphql } from "gatsby"
 
-export const query = graphql\`
-  ${this.buildFragment()}
-\`
-`
+export const query = graphql\`${this.buildFragment()}\``
   }
 
   private buildFragment() {
@@ -40,7 +45,7 @@ export const query = graphql\`
     fragment Widgets on CMS_ContentItem {
       __typename
       contentType
-      ${filtered.map(widget => `...${widget.name}`)}
+      ${filtered.map(widget => `...${widget.name}`).join('\n\t  ')}
     }`
   }
 }

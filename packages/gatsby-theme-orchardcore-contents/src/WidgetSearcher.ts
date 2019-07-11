@@ -1,9 +1,10 @@
 import { readFileSync } from 'fs-extra'
+import getGatsbyDependents from 'gatsby/dist/utils/gatsby-dependents'
 import glob from 'glob'
 import _ from 'lodash'
 import normalize from 'normalize-path'
 import path from 'path'
-import { Widget } from './types'
+import { WidgetDefinition } from './types'
 
 export default class WidgetSearcher {
   basePath: string
@@ -19,15 +20,15 @@ export default class WidgetSearcher {
   /**
    * Find all defined widgets in the project
    */
-  public async find(): Promise<Widget[]> {
-    const files = this.getAllFiles()
+  public async find(): Promise<WidgetDefinition[]> {
+    const files = await this.getAllFiles()
     const definitions = await this.parseAllFiles(files)
 
     return definitions
   }
 
-  private async parseAllFiles(files: string[]): Promise<Widget[]> {
-    const widgets: Widget[] = []
+  private async parseAllFiles(files: string[]): Promise<WidgetDefinition[]> {
+    const widgets: WidgetDefinition[] = []
 
     return Promise.all(
       files.map(file =>
@@ -41,8 +42,8 @@ export default class WidgetSearcher {
     ).then(() => widgets)
   }
 
-  private async parseFile(file: string): Promise<Widget> {
-    let widget: Widget
+  private async parseFile(file: string): Promise<WidgetDefinition> {
+    let widget: WidgetDefinition
 
     if(!file) {
       return null
@@ -80,36 +81,46 @@ export default class WidgetSearcher {
     return widget
   }
 
-  private getAllFiles(): string[] {
-    const { themes } = this.store.getState()
-    const themeDirs = this.resolveThemes(themes.themes)
+  private async getAllFiles(): Promise<string[]> {
+    // TODO: swap plugins to themes
+    const { themes, flattenedPlugins } = this.store.getState()
+    const themeDirs = this.resolveThemes(
+      themes.themes
+        ? themes.themes
+        : flattenedPlugins.map(plugin => {
+            return {
+              themeDir: plugin.pluginFilepath,
+            }
+          })
+    )
   
-    const filesRegex = path.join(`/**`, `*.+(t|j)s?(x)`)
+    const filesRegex = `*.+(t|j)s?(x)`
+    // Pattern that will be appended to searched directories.
+    // It will match any .js, .jsx, .ts, and .tsx files, that are not
+    // inside <searched_directory>/node_modules.
+    const pathRegex = `/{${filesRegex},!(node_modules)/**/${filesRegex}}`
+
+    const modulesThatUseGatsby = await getGatsbyDependents()
+
     let files = [
       path.join(this.basePath, `src`),
       path.join(this.basePath, `.cache`, `fragments`),
-      ...themeDirs
-    ].reduce(
-      (merged, folderPath) =>
-        merged.concat(
-          glob.sync(path.join(folderPath, filesRegex), {
-            nodir: true,
-          })
-        ),
-      []
-    )
-    files = files.filter(d => !d.match(/\.d\.ts$/))
-    files = files.map(normalize)
+    ]
+      .concat(themeDirs.map(additional => path.join(additional, `src`)))
+      .concat(modulesThatUseGatsby.map(module => module.path))
+      .reduce(
+        (merged, folderPath) =>
+          merged.concat(
+            glob.sync(path.join(folderPath, pathRegex), {
+              nodir: true,
+            })
+          ),
+        []
+      )
 
-    // Ensure all page components added as they're not necessarily in the
-    // pages directory e.g. a plugin could add a page component.  Plugins
-    // *should* copy their components (if they add a query) to .cache so that
-    // our babel plugin to remove the query on building is active (we don't
-    // run babel on code in node_modules). Otherwise the component will throw
-    // an error in the browser of "graphql is not defined".
-    files = files.concat(
-      Array.from(this.store.getState().components.keys(), c => normalize(c))
-    )
+    files = files.filter(d => !d.match(/\.d\.ts$/))
+
+    files = files.map(normalize)
     files = _.uniq(files)
 
     return files

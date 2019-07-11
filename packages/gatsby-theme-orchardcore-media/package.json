@@ -1,5 +1,5 @@
 {
-    "name": "gatsby-theme-orchardcore-images",
+    "name": "gatsby-theme-orchardcore-media",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
@@ -12,6 +12,6 @@
     },
     "peerDependencies": {
         "react":"^16.8.6",
-        "gatsby": "^2.6.0"
+        "gatsby": "^2.13.13"
     }
 }

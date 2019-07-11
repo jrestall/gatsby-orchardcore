@@ -1,1 +1,1 @@
-export default ({pageContext, children}) => children
+export default ({_pageContext, children}) => children

@@ -1,117 +1,35 @@
-exports.onCreatingTemplate = async ({ result, addWidget, graphql, setPageContext }) => {
-  console.log('gatsby-theme-orchardcore-layers:onCreatingTemplate')
+require('ts-node').register()
+const Debug = require('debug')
+const path = require('path')
+const { registerBuilder } = require('gatsby-theme-orchardcore-contents/src')
+const LayerBuilder = require('./src/LayerBuilder').default
 
-  if(!result.data.cms.siteLayers) {
-    console.warn("No site layers configured for site!")
-    return
-  }
+/**
+ * Register the LayerBuilder so that it can help build GatsbyJS pages.
+ */
+registerBuilder(LayerBuilder)
 
-  // Retrieve the siteLayers graphql query result.
-  const layers = Object.values(result.data.cms.siteLayers) 
-  
-  // Get all active layers for this page
-  const activeLayers = getActiveLayers(layers)
-  
-  if(!activeLayers) {
-    console.log(`No active layers found.`)
-    return
-  }
-  
-  // Get the widget names used in zones on this page
-  const widgets = getWidgetsFromLayers(activeLayers)
-  
-  for(let widget of widgets) {
-    addWidget(widget)
-  }
-
-  // Group and order the widgets into named zones 
-  const zones = getZonesFromLayers(activeLayers)
-  setPageContext({zones})
-}
-
-exports.sourcePageQuery = async ({ addOperations }) => {
-  console.log('gatsby-theme-orchardcore-layers:sourcePageQuery')
-
-  const layersQuery = `
-    cms {
-      siteLayers {
-        name
-        rule
-        description
-        widgets(status: PUBLISHED) {
-          renderTitle
-          position
-          zone
-          widget {
-            ...Widgets
-          }
-        }
-      }
-    }`
-
-  addOperations(layersQuery)
-}
-
-function getWidgetsFromLayers(layers) {
-  const widgetNames = []
-  layers.forEach(layer => {
-    layer.widgets.forEach(layerWidget => {
-      const widgetName = getWidgetName(layerWidget.widget)
-      widgetNames.push(widgetName)
-    })
+/**
+ * When shipping NPM modules, they typically need to be either
+ * pre-compiled or the user needs to add bundler config to process the
+ * files. Gatsby lets us ship the bundler config *with* the theme, so
+ * we never need a lib-side build step.  Since we dont pre-compile the
+ * theme, this is how we let webpack know how to process files.
+ */
+exports.onCreateWebpackConfig = ({ stage, loaders, plugins, actions }) => {
+  const debug = Debug('gatsby-theme-orchardcore-layers:onCreateWebpackConfig')
+  debug('ensuring Webpack will compile theme code')
+  actions.setWebpackConfig({
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          include: path.dirname(
+            require.resolve('gatsby-theme-orchardcore-layers')
+          ),
+          use: [loaders.js()],
+        },
+      ],
+    },
   })
-  return widgetNames
-}
-
-function getZonesFromLayers(layers) {
-  const zones = new Object()
-  layers.forEach(layer => {
-    layer.widgets.forEach(layerWidget => {
-      const zone = layerWidget.zone
-      const position = layerWidget.position
-      const widget = layerWidget.widget
-      
-      addToZone(zones, zone, position, widget)
-    })
-  })
-  return zones
-}
-
-function addToZone(zones, name, position, widget) {
-  let zone = zones[name]
-  if(zone) {
-    // Add widget to the correct position in the existing zone
-    zone.push({position, widget})
-    zone.sort(comparePosition)
-  } else {
-    // Create the Zone
-    zones[name] = [{position, widget}]
-  }
-}
-
-function comparePosition(a, b) {
-  if (a.position > b.Position) {
-    return 1;
-  }
-  if (a.position < b.Position) {
-    return -1;
-  }
-  return 0;
-}
-
-function getActiveLayers(layers) {
-  // TODO: Filter based on layer.rule using new Function(url, isAuthenticated, isAnonymous, culture, 'return ${rule}');
-  return layers
-}
-
-function getWidgetName(contentItem) {
-  if (!contentItem) {
-    return null
-  }
-  if (contentItem.contentType) {
-    return contentItem.contentType
-  }
-  if (contentItem.__typename) {
-    return contentItem.__typename
-  }
 }
