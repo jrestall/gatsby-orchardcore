@@ -1,0 +1,13 @@
+{
+    "name": "gatsby-theme-orchardcore-localization",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "private": false,
+    "dependencies": {
+        "gatsby-plugin-intl": "^0.2.6"
+    },
+    "peerDependencies": {
+        "gatsby": "^2.13.13"
+    }
+}

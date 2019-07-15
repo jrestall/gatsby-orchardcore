@@ -4,6 +4,7 @@ module.exports = {
     "gatsby-plugin-tslint",
     "gatsby-theme-orchardcore-layers", 
     "gatsby-theme-orchardcore-media",
-    "gatsby-theme-orchardcore-pages" 
+    "gatsby-theme-orchardcore-pages",
+    "gatsby-theme-orchardcore-localization" 
   ]
 };

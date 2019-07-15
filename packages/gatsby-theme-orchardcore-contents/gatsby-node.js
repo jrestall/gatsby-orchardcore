@@ -110,10 +110,6 @@ async function executeContentQuery(operations, fragments, graphql) {
   return result.data
 }
 
-function newBuilder(builderClass, arguments) { 
-  return 
-}
-
 // Gets all registered builder classes and dynamically 
 // contructs them whilst injecting dependencies.
 function getContentBuilders(dependencies) {
