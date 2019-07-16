@@ -5,6 +5,18 @@ module.exports = {
     "gatsby-theme-orchardcore-layers", 
     "gatsby-theme-orchardcore-media",
     "gatsby-theme-orchardcore-pages",
-    "gatsby-theme-orchardcore-localization" 
+    {
+      resolve: "gatsby-theme-orchardcore-localization",
+        options: {
+          // language JSON resource path
+          path: `${__dirname}/src/intl`,
+          // supported languages
+          languages: [`en`, `es`],
+          // default language file path
+          defaultLanguage: `en`,
+          // option to redirect to `/en` when connecting to `/`
+          redirect: false,
+        },
+    } 
   ]
 };

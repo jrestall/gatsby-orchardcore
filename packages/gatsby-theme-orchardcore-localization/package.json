@@ -1,13 +1,18 @@
 {
-    "name": "gatsby-theme-orchardcore-localization",
-    "version": "1.0.0",
-    "main": "index.js",
-    "license": "MIT",
-    "private": false,
-    "dependencies": {
-        "gatsby-plugin-intl": "^0.2.6"
-    },
-    "peerDependencies": {
-        "gatsby": "^2.13.13"
-    }
+  "name": "gatsby-theme-orchardcore-localization",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "browser-lang": "^0.1.0",
+    "intl": "^1.2.5",
+    "react-intl": "^2.9.0"
+  },
+  "devDependencies": {
+    "lodash": "^4.17.14"
+  },
+  "peerDependencies": {
+    "gatsby": "^2.13.13"
+  }
 }
