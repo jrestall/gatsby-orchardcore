@@ -2,13 +2,14 @@
     "name": "gatsby-orchardcore",
     "version": "1.0.0",
     "main": "index.js",
-    "author": "jrestall <james.restall@gmail.com> (@james.restall)",
+    "types": "dist/index.d.ts",
+    "author": "jrestall (@james.restall)",
     "license": "MIT",
     "private": true,
     "devDependencies": {
         "@types/react": "^16.8.22",
         "@types/react-dom": "^16.8.4",
-        "lerna": "^3.15.0",
+        "lerna": "^3.16.4",
         "husky": "^2.3.0",
         "lint-staged": "^8.1.7",
         "prettier": "^1.17.1",
@@ -20,11 +21,9 @@
         "typescript": "^3.5.3"
     },
     "scripts": {
-        "build": "gatsby build",
-        "develop": "gatsby develop",
+        "build": "lerna run build",
         "format": "prettier --write packages/**/*.{js,jsx,ts,tsx}",
-        "start": "npm run develop",
-        "serve": "gatsby serve",
+        "start": "yarn workspace site gatsby develop",
         "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
         "type": "tsc --noEmit",
         "lint": "tslint packages/**/*.{js,ts,tsx}"

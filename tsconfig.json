@@ -8,10 +8,9 @@
 		"lib": ["dom", "esnext"],
 		"target": "es2017",
 
-		"declaration": true,
-		"declarationDir": "types",
+		"declaration": false,
 
-		"noEmit": true,
+		"noEmit": false,
 		"noEmitOnError": true,
 		"noErrorTruncation": true,
 
@@ -25,7 +24,9 @@
 		"esModuleInterop": true,
 		"noImplicitThis": true,
 		"noUnusedLocals": true,
-		"noUnusedParameters": true
-    },
-    "exclude": ["node_modules", "public", "gatsby-source-orchardcore"]
+		"noUnusedParameters": true,
+
+    "outDir": "dist",
+	},
+	"exclude": ["node_modules", "public", "gatsby-source-orchardcore"]
 }

@@ -36,7 +36,6 @@ exports.onCreateWebpackConfig = ({ actions, plugins }, pluginOptions) => {
   })
 }
 
-const allSitePage = []
 let siteCultures = null
 
 exports.onCreatePage = async ({ page, actions, store, report }, pluginOptions) => {
@@ -94,7 +93,7 @@ exports.onCreatePage = async ({ page, actions, store, report }, pluginOptions) =
   const generatePage = (routed, language) => {
     const messages = getMessages(path, language)
     const newPath = routed ? `/${language}${page.path}` : page.path
-    allSitePage.push(newPath)
+
     return {
       ...page,
       path: newPath,
@@ -106,8 +105,7 @@ exports.onCreatePage = async ({ page, actions, store, report }, pluginOptions) =
           messages,
           routed,
           originalPath: page.path,
-          redirect,
-          allSitePage,
+          redirect
         },
       },
     }
@@ -135,6 +133,9 @@ exports.onCreatePage = async ({ page, actions, store, report }, pluginOptions) =
 
   languages.forEach(language => {
     const localePage = generatePage(true, language)
+    if (localePage.path.includes(`/404/`)) {
+      localePage.matchPath = `/${language}/*`
+    }
     createPage(localePage)
   })
 }

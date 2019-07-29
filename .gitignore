@@ -1,6 +1,9 @@
+dist
+
 # gatsbjs
 .cache
 public
+
 
 # Logs
 logs

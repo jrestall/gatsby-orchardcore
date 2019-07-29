@@ -1,9 +1,12 @@
 {
     "name": "gatsby-theme-orchardcore-pages",
-    "version": "1.0.0",
-    "main": "index.js",
+    "version": "0.0.1",
+    "main": "dist/index.js",
     "license": "MIT",
     "private": false,
+    "scripts": {
+        "build": "tsc"
+    },
     "dependencies": {
         "react-helmet": "^5.2.1",
         "gatsby-theme-orchardcore-flows": "*",

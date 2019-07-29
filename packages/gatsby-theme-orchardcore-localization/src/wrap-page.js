@@ -17,11 +17,12 @@ const getLocaleData = locale => {
 }
 
 const addLocaleDataForGatsby = language => {
-  const locale = language.split("-")[0]
+  const locale = language.toLowerCase().split("-")[0]
+  
   const localeData = getLocaleData(locale)
 
   if (!localeData) {
-    throw new Error(`Cannot find react-intl/locale-data/${language}`)
+    throw new Error(`Cannot find react-intl/locale-data/${locale}.js`)
   }
 
   addLocaleData(...localeData)
@@ -43,13 +44,7 @@ export default ({ element, props }) => {
 
   const { pageContext, location } = props
   const { intl } = pageContext
-  const {
-    language,
-    languages,
-    redirect,
-    routed,
-    allSitePage,
-  } = intl
+  const { language, languages, redirect, routed } = intl
 
   if (typeof window !== "undefined") {
     window.___gatsbyIntl = intl
@@ -76,13 +71,7 @@ export default ({ element, props }) => {
       const queryParams = search || ""
       const newUrl = withPrefix(`/${detected}${pathname}${queryParams}`)
       window.localStorage.setItem("gatsby-intl-language", detected)
-
-      if (allSitePage.includes(newUrl)) {
-        window.location.replace(newUrl)
-      } else {
-        // TODO: better 404 handler instead of redirect
-        window.location.replace(withPrefix(`/${detected}/404`))
-      }
+      window.location.replace(newUrl)
     }
   }
   const renderElement = isRedirect
